@@ -84,3 +84,41 @@ while(True):
     
     moments = cv2.moments(cnts)
     
+    if moments['m00'] != 0:
+        cx = int(moments['m10'] / moments['m00'])
+        cy = int(moments['m01'] / moments['m00'])
+    centerMass = (cx,cy)
+    
+    
+    cv2.circle(frame,centerMass,7,[100,0,255],2)
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    cv2.putText(frame,'Center',tuple(centerMass),font,2,(255,255,255),2)
+    
+    distanceBetweenDefectsToCenter = []
+    for i in range(0,len(FarDefect)):
+        x = np.array(Fardefect[i])
+        centerMass = np.array(centerMass)
+        distance = np.sqrt(np.power(x[0]-centerMass[0],2)+np.poewr(x[1]-centerMass[1].2))
+        distanceBetweenDefectsToCenter.append(distance)
+        
+    sortedDefectsDistances = sorted(distanceBetweenDefectsToCenter)
+    AverageDefectDistance = np.mean(sortedDefectsDistance[0:2])
+    
+    finger = []
+    
+    for i in range(0,len(hull)-1):
+        if (np.absolute(hull[i][0][0] - hull[i+1][0][0]) > 80) or ( np.absoolute(hull[i][0][1] - hull[i+1][0][1]) > 80):
+            if hull[i][0][1] < 500:
+                finger.append(hull[i][0])
+    
+    finger = sorted(finger,key=lambda x: x[1])
+    fingers = finger[0:5]
+
+
+
+
+
+
+
+
+
