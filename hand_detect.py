@@ -31,6 +31,56 @@ cv2.createTrackbar('s', 'HSV_TrackBar',0,255,nothing)
 cv2.createTrackbar('v', 'HSV_TrackBar',0,255,nothing)
 
 
-while(1):
+while(True):
     start_time = time.time()
-    print(cap.read())
+    
+    ret, frame = cap.read()
+    
+    blur = cv2.blur(frame,(3,3))
+    
+    hsv = cv2.cvtColor(blur,cv2.COLOR_BGR2HSV)
+    
+    mask2 = cv2.inRange(hsv,np.array(2,50,50),np.array([15,255,255]))
+    
+    kernel_square = np.ones((11,11),np.uint8)
+    kernel_ellipse = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(5,5))
+    
+    dilation = cv2.dilate(mask2,kernel_ellipse,iterations=1)
+    erosion = cv2.erode(dilation,kernel_square,iterations=1)
+    dilation2 = cv2.dilate(erosion,kernel_ellipse,iterations=1)
+    filtered = cv2.medianBlur(dilation2,5)
+    kernel_ellipse = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(8,8))
+    dilation3 = cv2.dilate(filtered,kernel_ellipse,iterations = 1)
+    median = cv2.medianBlur(dilation2,5)
+    ret,thresh = cv2.threshold(median,127,255,0)
+    
+    contours, hierachy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+    
+    max_area = 100
+    ci = 0
+    for i in range(len(contours)):
+        cnt = contours[i]
+        area = cv2.contourArea(cnt)
+        if(area > max_area):
+            max_area = area
+            ci = i
+    
+    cnts = contours[ci]
+    hull = cv2.convexHull(cnts)
+    
+    hull2 = cv2.convexHull(cnts,returnPoints = False)
+    defects = cv2.convexityDefects(cnts,hull2)
+    
+    FarDefect = []
+    
+    for i in range(defects.shape[0]):
+        s,e,f,d = defects[i,0]
+        start = tuple(cnts[s][0])
+        end = tuple(cnts[e][0])
+        far = tuple(cnts[f][0])
+        FarDefect.append(far)
+        cv2.line(frame,start,end,[0,255,0],1)
+        cv2.circle(frame,far,10,[100,255,255],3)
+    
+    moments = cv2.moments(cnts)
+    
