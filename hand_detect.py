@@ -40,8 +40,8 @@ while(True):
     
     hsv = cv2.cvtColor(blur,cv2.COLOR_BGR2HSV)
     
-    mask2 = cv2.inRange(hsv,np.array(2,50,50),np.array([15,255,255]))
-    
+    mask2 = cv2.inRange(hsv,np.array([2,50,50]),np.array([15,255,255]))
+
     kernel_square = np.ones((11,11),np.uint8)
     kernel_ellipse = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(5,5))
     
@@ -96,18 +96,18 @@ while(True):
     
     distanceBetweenDefectsToCenter = []
     for i in range(0,len(FarDefect)):
-        x = np.array(Fardefect[i])
+        x = np.array(FarDefect[i])
         centerMass = np.array(centerMass)
-        distance = np.sqrt(np.power(x[0]-centerMass[0],2)+np.poewr(x[1]-centerMass[1].2))
+        distance = np.sqrt(np.power(x[0]-centerMass[0],2)+np.power(x[1]-centerMass[1],2))
         distanceBetweenDefectsToCenter.append(distance)
         
     sortedDefectsDistances = sorted(distanceBetweenDefectsToCenter)
-    AverageDefectDistance = np.mean(sortedDefectsDistance[0:2])
+    AverageDefectDistance = np.mean(sortedDefectsDistances[0:2])
     
     finger = []
     
     for i in range(0,len(hull)-1):
-        if (np.absolute(hull[i][0][0] - hull[i+1][0][0]) > 80) or ( np.absoolute(hull[i][0][1] - hull[i+1][0][1]) > 80):
+        if (np.absolute(hull[i][0][0] - hull[i+1][0][0]) > 80) or ( np.absolute(hull[i][0][1] - hull[i+1][0][1]) > 80):
             if hull[i][0][1] < 500:
                 finger.append(hull[i][0])
     
@@ -117,9 +117,33 @@ while(True):
     fingerDistance = []
     
     for i in range(0,len(fingers)):
-        distance = np.sqrt(np.power)
+        distance = np.sqrt(np.power(fingers[i][0]-centerMass[0],2)+np.power(fingers[i][1]-centerMass[0],2))
+        fingerDistance.append(distance)
+    
+    result = 0
+    for i in range(0,len(fingers)):
+        if fingerDistance[i] > AverageDefectDistance + 130:
+            result = result + 1
+    
+    #Print number of pointed fingers
+    cv2.putText(frame,str(result),(100,100),font,2,(255,255,255),2)
+    
+    
+    x,y,w,h = cv2.boundingRect(cnts)
+    img = cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),2)
+    
+    cv2.drawContours(frame,[hull],-1,(255,255,255),2)
+    
+    ###show image ####
+    
+    cv2.imshow('Dilation',frame)
+    
+    k = cv2.waitKey(5) & 0xFF
+    if k == 27:
+        break
 
-
+cap.release()
+cv2.destroyAllWindows()
 
 
 
