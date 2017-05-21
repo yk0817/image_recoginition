@@ -113,6 +113,11 @@ while(True):
     
     finger = sorted(finger,key=lambda x: x[1])
     fingers = finger[0:5]
+    
+    fingerDistance = []
+    
+    for i in range(0,len(fingers)):
+        distance = np.sqrt(np.power)
 
 
 
