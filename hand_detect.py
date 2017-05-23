@@ -33,7 +33,6 @@ cv2.createTrackbar('v', 'HSV_TrackBar',0,255,nothing)
 
 while(True):
     start_time = time.time()
-    
     ret, frame = cap.read()
     
     blur = cv2.blur(frame,(3,3))
@@ -41,7 +40,7 @@ while(True):
     hsv = cv2.cvtColor(blur,cv2.COLOR_BGR2HSV)
     
     mask2 = cv2.inRange(hsv,np.array([2,50,50]),np.array([15,255,255]))
-
+    
     kernel_square = np.ones((11,11),np.uint8)
     kernel_ellipse = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(5,5))
     
@@ -134,7 +133,7 @@ while(True):
     
     cv2.drawContours(frame,[hull],-1,(255,255,255),2)
     
-    ###show image ####
+    ##show image ####
     
     cv2.imshow('Dilation',frame)
     
