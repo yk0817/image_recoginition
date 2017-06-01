@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import cv2
 import random
 import time
@@ -17,7 +18,11 @@ while(True):
     cv2.imshow("camera", color)
     
     for loop_count in range(0, 10):
-        
+        hsv = cv2.cvtColor(color,cv2.cv.CV_BGR2HSV)
+        # u"範囲にあれば全てのビットを１にする"
+        mask = cv2.inRange(hsv, Scalar(0, 20, 20), Scalar(25, 255, 255), skin)
+        print(mask)
+
 
 
 
