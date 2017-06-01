@@ -2,7 +2,7 @@
 import cv2
 import random
 import time
-
+import numpy as np
 
 cap = cv2.VideoCapture(0)
 
@@ -20,7 +20,9 @@ while(True):
     for loop_count in range(0, 10):
         hsv = cv2.cvtColor(color,cv2.cv.CV_BGR2HSV)
         # u"範囲にあれば全てのビットを１にする"
-        mask = cv2.inRange(hsv, Scalar(0, 20, 20), Scalar(25, 255, 255), skin)
+        array1 = np.array([0,20,20])
+        array2 = np.array([25,255,255])
+        mask = cv2.inRange(hsv, array1, array2)
         print(mask)
 
 
