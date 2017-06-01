@@ -20,10 +20,13 @@ while(True):
     for loop_count in range(0, 10):
         hsv = cv2.cvtColor(color,cv2.cv.CV_BGR2HSV)
         # u"範囲にあれば全てのビットを１にする"
-        array1 = np.array([0,20,20])
-        array2 = np.array([25,255,255])
-        mask = cv2.inRange(hsv, array1, array2)
-        print(mask)
+        color_lower_array = np.array([0,20,20])
+        color_max_array = np.array([25,255,255])
+        mask = cv2.inRange(hsv, color_lower_array, color_max_array)
+        # print(mask)
+        # u"フィルタリング構造を返す"
+        structElem = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
+        # print(structElem)
 
 
 
