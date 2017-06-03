@@ -15,7 +15,7 @@ while(True):
     # print(cap)
     ret, frame = cap.read()
     color = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    cv2.imshow("camera", color)
+    # cv2.imshow("camera", color)
     
     for loop_count in range(0, 10):
         hsv = cv2.cvtColor(color,cv2.cv.CV_BGR2HSV)
@@ -27,6 +27,9 @@ while(True):
         # u"フィルタリング構造を返す"
         structElem = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
         # print(structElem)
+        # u"closingのタプルの扱いが謎"
+        closing = cv2.morphologyEx(structElem, cv2.MORPH_CLOSE,(3,3))
+        # cv2.imshow("camera", closing)
 
 
 
