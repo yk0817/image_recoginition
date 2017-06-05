@@ -30,7 +30,8 @@ while(True):
         # u"closingのタプルの扱いが謎"
         closing = cv2.morphologyEx(structElem, cv2.MORPH_CLOSE,(3,3))
         # cv2.imshow("camera", closing)
-
+        find_contour = cv2.findContours
+        
 
 
 
