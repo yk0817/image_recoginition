@@ -1,11 +1,12 @@
 import cv2
 import numpy as np
 import time
+import sys
 
 cap = cv2.VideoCapture(0)
 
-cap.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, 1000)
-cap.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, 600)
+cap.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, 800)
+cap.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, 400)
 
 def nothing(x):
     pass
@@ -68,6 +69,7 @@ while(True):
     hull = cv2.convexHull(cnts)
     
     hull2 = cv2.convexHull(cnts,returnPoints = False)
+    # u"凸性の欠陥を見つける"
     defects = cv2.convexityDefects(cnts,hull2)
     
     FarDefect = []
@@ -106,10 +108,12 @@ while(True):
     finger = []
     
     for i in range(0,len(hull)-1):
-        if (np.absolute(hull[i][0][0] - hull[i+1][0][0]) > 80) or ( np.absolute(hull[i][0][1] - hull[i+1][0][1]) > 80):
-            if hull[i][0][1] < 500:
+        if (np.absolute(hull[i][0][0] - hull[i+1][0][0]) > 110) or ( np.absolute(hull[i][0][1] - hull[i+1][0][1]) > 110):
+            # print(hull)
+            if hull[i][0][1] < 400:
                 finger.append(hull[i][0])
     
+    # print(finger)
     finger = sorted(finger,key=lambda x: x[1])
     fingers = finger[0:5]
     
@@ -121,7 +125,13 @@ while(True):
     
     result = 0
     for i in range(0,len(fingers)):
-        if fingerDistance[i] > AverageDefectDistance + 130:
+        print("fingerDistance")
+        print(fingerDistance)
+        print("fingerDistance")
+        print("average")
+        print(AverageDefectDistance)
+        print("average")
+        if fingerDistance[i] > AverageDefectDistance + 120:
             result = result + 1
     
     #Print number of pointed fingers
