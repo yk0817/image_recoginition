@@ -6,10 +6,9 @@ import sys
 img = cv2.imread("./hand.jpg")
 # print(im.shape)
 orgHeight, orgWidth = img.shape[:2]
-size = (orgHeight/2, orgWidth/2)
-halfImg = cv2.resize(img, size)
+size = (orgHeight/3, orgWidth/3)
+halfImg = cv2.resize(img, size,interpolation=cv2.INTER_LINEAR)
 
-# sys.exit()
 
 gray = cv2.cvtColor(halfImg,cv2.COLOR_RGB2GRAY)
 cv2.imshow("result",gray)
